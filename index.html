@@ -6,59 +6,62 @@
 <meta name="theme-color" content="#030711">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AI Splash">
-<title>AI · Particle Opening</title>
+<meta name="apple-mobile-web-app-title" content="AI Opening">
+<title>AI Particle Opening · V2</title>
 <style>
-:root{color-scheme:dark;--bg:#030711;--ice:#b9edff;--blue:#55caff}
+:root{color-scheme:dark;--ice:#dff8ff;--cyan:#61d8ff;--blue:#4a8dff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif}
-body{min-height:100svh}#stage{position:relative;width:100vw;height:100svh;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#0a1b31 0%,#060d1a 35%,#030711 72%,#02040a 100%)}
-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.shade{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 28%,rgba(0,0,0,.36) 100%)}
-.content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 22px env(safe-area-inset-bottom);pointer-events:none;transform:translateY(-1.5vh)}
-.emblem{position:relative;width:min(39vw,156px);aspect-ratio:1;display:grid;place-items:center;opacity:0;transform:scale(.72);filter:drop-shadow(0 0 26px rgba(79,193,255,.3))}
-.emblem svg{width:100%;height:100%;overflow:visible}.orbit{fill:none;stroke:rgba(142,224,255,.8);stroke-width:1.1}.core{fill:url(#coreGrad);stroke:rgba(219,248,255,.92);stroke-width:1.3}.spark{fill:#dff9ff;filter:drop-shadow(0 0 5px #68d6ff)}
-.wordmark{margin-top:27px;font-size:clamp(27px,7.5vw,36px);font-weight:570;letter-spacing:-1px;color:#f4fbff;opacity:0;transform:translateY(10px);text-shadow:0 0 28px rgba(89,197,255,.16)}
-.sub{margin-top:10px;font-size:10px;letter-spacing:3.4px;color:rgba(170,211,239,.55);opacity:0;transform:translateY(6px)}
-#replay{position:absolute;right:17px;top:calc(env(safe-area-inset-top) + 15px);border:1px solid rgba(155,213,246,.2);background:rgba(10,22,39,.56);color:rgba(226,244,255,.76);border-radius:99px;padding:10px 13px;font-size:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:auto}
-#replay:active{transform:scale(.97)}@keyframes rise{to{opacity:1;transform:scale(1)}}@keyframes wordRise{to{opacity:1;transform:translateY(0)}}@keyframes ringTurn{to{transform:rotate(360deg)}}.show-emblem{animation:rise .62s cubic-bezier(.16,.84,.24,1) forwards}.show-word{animation:wordRise .5s ease-out forwards}.show-sub{animation:wordRise .6s ease-out forwards}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030711;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif}
+#stage{position:relative;width:100vw;height:100svh;overflow:hidden;background:radial-gradient(ellipse at 50% 46%,#0b1d34 0%,#071020 35%,#030711 72%,#02040a 100%)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 24%,rgba(0,0,0,.42) 100%)}
+.center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 24px env(safe-area-inset-bottom);transform:translateY(-1.5vh);pointer-events:none}
+.mark{width:min(42vw,166px);aspect-ratio:1;position:relative;opacity:0;transform:scale(.84);filter:drop-shadow(0 0 24px rgba(72,180,255,.18))}
+.mark svg{width:100%;height:100%;overflow:visible}.orbit{fill:none;stroke:url(#lineGrad);stroke-width:1.1;opacity:.9}.orbit.thin{stroke-width:.6;opacity:.55}.node{fill:#dffaff;filter:drop-shadow(0 0 4px #61d8ff)}.core{fill:url(#sphere);stroke:rgba(225,249,255,.8);stroke-width:.8}
+.name{margin-top:27px;color:#f4fbff;font-size:clamp(29px,7.7vw,37px);font-weight:570;letter-spacing:-1.2px;opacity:0;transform:translateY(8px);text-shadow:0 0 28px rgba(92,197,255,.13)}
+.tagline{margin-top:12px;color:rgba(165,205,232,.48);font-size:9px;letter-spacing:3.6px;opacity:0;transform:translateY(5px)}
+#replay{position:absolute;right:17px;top:calc(env(safe-area-inset-top) + 15px);padding:10px 13px;border:1px solid rgba(155,213,246,.2);border-radius:99px;background:rgba(10,22,39,.5);color:rgba(226,244,255,.72);font-size:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:auto}
+@keyframes appear{to{opacity:1;transform:scale(1)}}@keyframes textIn{to{opacity:1;transform:translateY(0)}}@keyframes orbitSpin{to{transform:rotate(360deg)}}.in-mark{animation:appear .72s cubic-bezier(.16,.84,.24,1) forwards}.in-name{animation:textIn .55s ease-out forwards}.in-tag{animation:textIn .6s ease-out forwards}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 <main id="stage" aria-label="科技粒子启动动画">
-<canvas id="particles"></canvas><div class="shade"></div>
-<div class="content">
-  <div class="emblem" id="emblem" aria-hidden="true">
+<canvas id="particles"></canvas><div class="vignette"></div>
+<div class="center">
+  <div class="mark" id="mark" aria-hidden="true">
     <svg viewBox="0 0 120 120" role="presentation">
-      <defs><radialGradient id="coreGrad"><stop offset="0" stop-color="#d9f8ff" stop-opacity=".95"/><stop offset=".42" stop-color="#6ed4ff" stop-opacity=".28"/><stop offset="1" stop-color="#48aaff" stop-opacity=".02"/></radialGradient></defs>
-      <circle class="core" cx="60" cy="60" r="26"/>
-      <ellipse class="orbit" cx="60" cy="60" rx="43" ry="17" transform="rotate(-34 60 60)"/>
-      <ellipse class="orbit" cx="60" cy="60" rx="43" ry="17" transform="rotate(34 60 60)" opacity=".55"/>
-      <circle class="spark" cx="99" cy="36" r="2.2"/><circle class="spark" cx="22" cy="72" r="1.7"/><circle class="spark" cx="70" cy="17" r="1.5"/>
+      <defs>
+        <radialGradient id="sphere"><stop offset="0" stop-color="#e9fcff" stop-opacity=".9"/><stop offset=".36" stop-color="#66d5ff" stop-opacity=".3"/><stop offset="1" stop-color="#2d7cff" stop-opacity=".015"/></radialGradient>
+        <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d8f8ff"/><stop offset=".52" stop-color="#59caff"/><stop offset="1" stop-color="#738dff"/></linearGradient>
+      </defs>
+      <circle class="core" cx="60" cy="60" r="27"/>
+      <ellipse class="orbit" cx="60" cy="60" rx="44" ry="18" transform="rotate(-34 60 60)"/>
+      <ellipse class="orbit" cx="60" cy="60" rx="44" ry="18" transform="rotate(34 60 60)"/>
+      <ellipse class="orbit thin" cx="60" cy="60" rx="34" ry="47" transform="rotate(19 60 60)"/>
+      <circle class="node" cx="99" cy="34" r="2.1"/><circle class="node" cx="20" cy="72" r="1.7"/><circle class="node" cx="70" cy="14" r="1.5"/>
     </svg>
   </div>
-  <div class="wordmark" id="wordmark">ChatGPT</div>
-  <div class="sub" id="sub">INTELLIGENCE IN MOTION</div>
+  <div class="name" id="name">ChatGPT</div>
+  <div class="tagline" id="tagline">INTELLIGENCE IN MOTION</div>
 </div>
 <button id="replay" type="button">↻ 重播动画</button>
 </main>
 <script>
 (()=>{
-const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d',{alpha:true});
-const emblem=document.getElementById('emblem'),word=document.getElementById('wordmark'),sub=document.getElementById('sub'),replay=document.getElementById('replay');
-let W=0,H=0,DPR=1,stars=[],dust=[],start=0,raf=0,shown=false;
+const canvas=document.querySelector('#particles'),ctx=canvas.getContext('2d',{alpha:true});
+const mark=document.querySelector('#mark'),name=document.querySelector('#name'),tagline=document.querySelector('#tagline'),replay=document.querySelector('#replay');
+let W=0,H=0,D=1,particles=[],stars=[],raf=0,start=0,revealed=false;
 const rand=(a,b)=>a+Math.random()*(b-a),clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>{x=clamp(x);return x*x*(3-2*x)};
-function resize(){W=innerWidth;H=innerHeight;DPR=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);makeDust()}
-function makeDust(){dust=[];stars=[];let n=Math.min(420,Math.max(230,Math.floor(W*H/2300)));for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,r=rand(Math.min(W,H)*.12,Math.max(W,H)*.72);dust.push({x:W/2+Math.cos(a)*r,y:H*.455+Math.sin(a)*r,vx:rand(-.25,.25),vy:rand(-.25,.25),a,size:rand(.5,1.65),delay:Math.random()*.48,seed:Math.random()*6.28,bright:Math.random()})}for(let i=0;i<95;i++)stars.push({x:rand(0,W),y:rand(0,H),r:rand(.25,1),p:rand(0,6.28),v:rand(.03,.14)})}
-function draw(now){let elapsed=(now-start)/1000,progress=clamp(elapsed/2.5),gather=ease((progress-.04)/.62),cx=W*.5,cy=H*.455;ctx.clearRect(0,0,W,H);
-let glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*.42);glow.addColorStop(0,`rgba(38,126,197,${.04+.055*Math.sin(now*.0012)})`);glow.addColorStop(.5,'rgba(14,64,112,.035)');glow.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
-for(const s of stars){let a=.12+.25*(.5+.5*Math.sin(now*.001*s.v*8+s.p));ctx.beginPath();ctx.fillStyle=`rgba(126,198,237,${a})`;ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()}
-for(const p of dust){let swirl=1-gather,angle=p.a+now*.00018*(p.bright>.5?1:-1),radius=(Math.min(W,H)*(.035+.18*(1-gather)))+(1-gather)*Math.sin(now*.001+p.seed)*8;let tx=cx+Math.cos(angle)*radius,ty=cy+Math.sin(angle)*radius*1.08;let x=p.x+(tx-p.x)*(.018+gather*.20),y=p.y+(ty-p.y)*(.018+gather*.20);p.x=x;p.y=y;let alpha=(.1+.8*gather)*(.65+.35*Math.sin(now*.003+p.seed));ctx.beginPath();ctx.fillStyle=p.bright>.83?`rgba(228,250,255,${alpha})`:`rgba(76,190,255,${alpha})`;ctx.shadowBlur=2+gather*10;ctx.shadowColor='#63cfff';ctx.arc(x,y,p.size*(.65+gather*.65),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-if(gather>.22&&p.bright>.96){ctx.beginPath();ctx.strokeStyle=`rgba(133,222,255,${.16*gather})`;ctx.lineWidth=.6;ctx.moveTo(x,y);ctx.lineTo(x+(cx-x)*.045,y+(cy-y)*.045);ctx.stroke()}}
-if(progress>.64&&!shown){shown=true;emblem.classList.add('show-emblem');setTimeout(()=>{word.classList.add('show-word');sub.classList.add('show-sub');replay.style.opacity='1'},270)}
-if(progress<1.08)raf=requestAnimationFrame(draw)}
-function play(){cancelAnimationFrame(raf);shown=false;start=performance.now();emblem.classList.remove('show-emblem');word.classList.remove('show-word');sub.classList.remove('show-sub');emblem.style.opacity='0';emblem.style.transform='scale(.72)';word.style.opacity='0';word.style.transform='translateY(10px)';sub.style.opacity='0';sub.style.transform='translateY(6px)';replay.style.opacity='0';makeDust();raf=requestAnimationFrame(draw)}
-addEventListener('resize',resize,{passive:true});replay.addEventListener('click',play);document.getElementById('stage').addEventListener('click',e=>{if(e.target!==replay&&shown)play()});resize();play();
+function resize(){W=innerWidth;H=innerHeight;D=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*D);canvas.height=Math.round(H*D);ctx.setTransform(D,0,0,D,0,0);seed()}
+function seed(){particles=[];stars=[];let n=Math.min(380,Math.max(210,Math.floor(W*H/2500)));for(let i=0;i<n;i++){let a=Math.random()*Math.PI*2,r=rand(Math.min(W,H)*.18,Math.max(W,H)*.68);particles.push({x:W/2+Math.cos(a)*r,y:H*.455+Math.sin(a)*r,a,r,phase:rand(0,6.28),size:rand(.55,1.6),tone:Math.random(),speed:rand(.65,1.25)})}for(let i=0;i<75;i++)stars.push({x:rand(0,W),y:rand(0,H),r:rand(.25,.9),p:rand(0,6.28)})}
+function frame(t){let s=(t-start)/1000,p=clamp(s/2.5),g=ease((p-.04)/.64),cx=W/2,cy=H*.455;ctx.clearRect(0,0,W,H);
+let glow=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.min(W,H)*.48);glow.addColorStop(0,`rgba(43,125,197,${.07+.035*Math.sin(t*.001)})`);glow.addColorStop(.45,'rgba(18,65,118,.035)');glow.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
+for(const st of stars){ctx.beginPath();ctx.fillStyle=`rgba(131,194,235,${.1+.18*(.5+.5*Math.sin(t*.0007+st.p))})`;ctx.arc(st.x,st.y,st.r,0,Math.PI*2);ctx.fill()}
+for(const q of particles){let ang=q.a+t*.00012*q.speed;let targetR=(Math.min(W,H)*(.018+.16*(1-g)))+Math.sin(t*.001+q.phase)*5*(1-g);let tx=cx+Math.cos(ang)*targetR,ty=cy+Math.sin(ang)*targetR*1.12;let pull=.012+g*.24;q.x+=(tx-q.x)*pull;q.y+=(ty-q.y)*pull;let a=(.12+.78*g)*(.68+.32*Math.sin(t*.0026+q.phase));ctx.beginPath();ctx.fillStyle=q.tone>.87?`rgba(226,250,255,${a})`:`rgba(77,190,255,${a})`;ctx.shadowBlur=2+g*8;ctx.shadowColor='#61d8ff';ctx.arc(q.x,q.y,q.size*(.7+g*.45),0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;if(g>.25&&q.tone>.975){ctx.beginPath();ctx.strokeStyle=`rgba(139,224,255,${.2*g})`;ctx.lineWidth=.6;ctx.moveTo(q.x,q.y);ctx.lineTo(q.x+(cx-q.x)*.04,q.y+(cy-q.y)*.04);ctx.stroke()}}
+if(p>.62&&!revealed){revealed=true;mark.classList.add('in-mark');setTimeout(()=>{name.classList.add('in-name');tagline.classList.add('in-tag');replay.style.opacity='1'},260)}
+if(s<4.2)raf=requestAnimationFrame(frame)}
+function play(){cancelAnimationFrame(raf);revealed=false;start=performance.now();for(const el of [mark,name,tagline]){el.classList.remove('in-mark','in-name','in-tag');el.style.opacity='0';el.style.transform=el===mark?'scale(.84)':'translateY(8px)'}replay.style.opacity='0';seed();raf=requestAnimationFrame(frame)}
+addEventListener('resize',resize,{passive:true});replay.addEventListener('click',play);document.querySelector('#stage').addEventListener('click',e=>{if(e.target!==replay&&revealed)play()});resize();play();
 })();
 </script>
 </body>
